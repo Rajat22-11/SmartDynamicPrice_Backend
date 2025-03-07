@@ -9,22 +9,26 @@ from models import DiscountPredictionInput
 from utils import preprocess_input, model
 from graph import StockTrendAPI
 
+
+load_dotenv()
+
+
 db = SupabaseService()
 
 app = FastAPI(title="Price Flow")
+
+
 origins = [
     "http://localhost",
     "http://127.0.0.1",
-    "http://127.0.0.1:8000",
-    "http://localhost:8000",
     "http://localhost:5173",
-    "http://localhost:5174",  # Add this line
+    "http://localhost:5174",
+    "*",
 ]
-
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -33,7 +37,7 @@ app.add_middleware(
 
 @app.get("/")
 def home():
-    return {"message": "Welcome to Smart Dynamic Price"}
+    return {"message": "Welcome to Smart Dynamic Pricing System"}
 
 
 @app.get("/product/{product_name}")
@@ -88,5 +92,7 @@ async def stock_trend(
     return {"graph": graph}
 
 
+# Start the application with dynamic port for Render
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", 8000))  #
+    uvicorn.run(app, host="0.0.0.0", port=port)

@@ -5,3 +5,4 @@ supabase
 pydantic
 pickle-mixin
 pandas
+xgboost
