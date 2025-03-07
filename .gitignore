@@ -1,0 +1,10 @@
+__pycache__
+.env
+test.ipynb
+<<<<<<< HEAD
+stock_trend_baner.html
+=======
+a.json
+>>>>>>> 3fdcfe43c8161243670b3d8ff00c8036a3a349f5
+test.py
+backend
