@@ -1,29 +1,23 @@
 import os
+
 import uvicorn
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
+
 from database import SupabaseService
-from models import DiscountPredictionInput
-from utils import preprocess_input, model
 from graph import StockTrendAPI
-
-
-load_dotenv()
-
+from models import DiscountPredictionInput
+from utils import model, preprocess_input
 
 db = SupabaseService()
 
 app = FastAPI(title="Price Flow")
-
-
 origins = [
     "http://localhost",
-    "http://127.0.0.1",
+    "http://localhost:8000",
     "http://localhost:5173",
-    "http://localhost:5174",
-    "*",
 ]
 
 app.add_middleware(
@@ -37,7 +31,7 @@ app.add_middleware(
 
 @app.get("/")
 def home():
-    return {"message": "Welcome to Smart Dynamic Pricing System"}
+    return {"message": "Welcome to Smart dynamic Price"}
 
 
 @app.get("/product/{product_name}")
@@ -55,44 +49,42 @@ def get_products(category_name: str):
     return db.get_products_by_category(category_name)
 
 
+# API endpoint to predict discount
 @app.post("/predict_discount/")
 def predict_discount(input_data: DiscountPredictionInput):
+    # Convert input data to dictionary
     input_dict = input_data.dict()
+
+    # Preprocess input
     df = preprocess_input(input_dict)
+
+    # Make prediction
     prediction = model.predict(df)
 
     max_discount = float(prediction[0])
-    customer_type = input_dict["customer_type"].lower()
+    Customer_Type = input_dict["customer_type"]
 
-    if customer_type == "premium":
+    if Customer_Type.lower() == "premium":
         discount = 0.75 * max_discount
-    elif customer_type == "normal":
+
+    elif Customer_Type.lower() == "normal":
         discount = 0.45 * max_discount
+
     else:
         discount = 0.25 * max_discount
 
-    return {"max_discount": discount}
+    return {
+        "max_discount": discount,
+    }
 
 
-base_dir = os.path.dirname(os.path.abspath(__file__))
-file_path = os.path.join(base_dir, "synthetic_dataset1.csv")
-
-if not os.path.exists(file_path):
-    raise FileNotFoundError(f"Error: File not found at {file_path}")
-
-stock_trend_api = StockTrendAPI(file_path)
+stock_api = StockTrendAPI("synthetic_dataset1.csv")
 
 
 @app.get("/stock_trend", response_class=HTMLResponse)
-async def stock_trend(
-    location: str = Query(..., description="Store location"),
-    product: str = Query(..., description="Product name"),
-):
-    graph = stock_trend_api.get_stock_trend(location, product)
-    return {"graph": graph}
+def stock_trend(location: str = Query("Wakad"), product: str = Query("Dal ()")):
+    return stock_api.get_stock_trend(location, product)
 
 
-# Start the application with dynamic port for Render
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))  #
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=10000)
