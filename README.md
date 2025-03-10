@@ -1,10 +1,10 @@
-# Tekron 
-## Part - 1 : Synthetic Product Dataset Generation 🚀
+# Tekron
 
+## Part - 1 : Synthetic Product Dataset Generation 🚀
 
 Welcome to the **Synthetic Product Dataset Generator**! This repository contains a Python script that creates a synthetic dataset simulating realistic product order data. Use this dataset for testing, analysis, or demonstration purposes.
 
-[![Python Version](https://img.shields.io/badge/python-3.x-blue.svg)](https://www.python.org/)
+
 
 ## Table of Contents
 
@@ -12,9 +12,7 @@ Welcome to the **Synthetic Product Dataset Generator**! This repository contains
 - [Dataset Features](#dataset-features)
 - [How It Works](#how-it-works)
 - [Prerequisites](#prerequisites)
-- [Usage](#usage)
-- [Repository Structure](#repository-structure)
-- [Contributing](#contributing)
+
 
 ## Overview
 
@@ -39,18 +37,25 @@ Each record in the dataset includes the following fields:
 - **Customer Sentiment**: Sentiment indicator (Positive, Negative, Neutral)
 - **Time of Ordering**: Randomly generated order timestamp (`YYYY-MM-DD HH:MM:SS`)
 
+## Sample Output Image
+
+Below is a sample preview of the dataset generated:
+
+<img src="./Sample_Image.png" alt="Sample Image" width="500"/>
+
+
 ## How It Works
 
-- **Fixed MRP per Product:**  
+- **Fixed MRP per Product:**\
   Each product has a constant MRP throughout the dataset.
 
-- **Dynamic Pricing:**  
+- **Dynamic Pricing:**\
   Prices for Blinkit, Zepto, and Instamart are computed by applying a discount to the MRP, ensuring all platform prices remain below the MRP.
 
-- **Additional Realistic Attributes:**  
+- **Additional Realistic Attributes:**\
   The script includes fields for product margin, shelf life (derived from the product category), stock levels, and a random order timestamp to enhance the realism of the dataset.
 
-- **Randomized Data:**  
+- **Randomized Data:**\
   Details such as location, festive impact, delivery distance, and customer sentiment are randomized to simulate real-world variability.
 
 ## Prerequisites
@@ -58,7 +63,9 @@ Each record in the dataset includes the following fields:
 Make sure you have the following installed:
 
 - **Python 3.x**
-- **pandas** library  
+- **pandas** library\
   Install via:
   ```bash
   pip install pandas
+  ```
+
